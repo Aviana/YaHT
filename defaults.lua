@@ -1,3 +1,6 @@
+local _, playerClass = UnitClass("player")
+if playerClass ~= "HUNTER" then return end
+
 local L = YaHT.L
 
 StaticPopupDialogs["RESET_YAHT_PROFILE"] = {
