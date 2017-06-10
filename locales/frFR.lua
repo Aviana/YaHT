@@ -20,9 +20,17 @@ AceLocale:RegisterTranslations("frFR", function()
 		["Tranq options"] = "Tranq options",
 		["Tranq announce"] = "Tranq announce",
 		["Enable Tranquilizing Shot announce"] = "Enable Tranquilizing Shot announce",
+		["Tranq fail announce"] = "Tranq fail announce",
+		["Enable failed Tranquilizing Shot announce"] = "Enable failed Tranquilizing Shot announce",
+		["<Message>"] = "<Message>",
 		["Channel"] = "Channel",
 		["Channel in which to announce"] = "Channel in which to announce",
 		["<channelname>"] = "<channelname>",
+		["Tranq Message"] = "Tranq Message",
+		["What to send to the channel"] = "What to send to the channel",
+		["Use plain text and substitute the targets name with %t"] = "Use plain text and substitute the targets name with %t",
+		["Tranq fail Message"] = "Tranq fail Message",
+		["What to send to the channel when tranq failed"] = "What to send to the channel when tranq failed",
 		["Reset Settings"] = "Reset Settings",
 		
 		["Timer options"] = "Timer options",
@@ -46,7 +54,6 @@ AceLocale:RegisterTranslations("frFR", function()
 		["Viper Sting"] = "Morsure de vip\195\168re",
 		["Tranquilizing Shot"] = "Tir tranquillisant",
 		
-		["YaHT: Tranquilizing Shot on "] = "YaHT: Tranquilizing Shot on ",
 		["Loaded. The hunt begins!"] = "Loaded. The hunt begins!",
 		["Locked."] = "Locked.",
 		["Unlocked."] = "Unlocked.",
@@ -54,5 +61,9 @@ AceLocale:RegisterTranslations("frFR", function()
 		["OK"] = "OK",
 		["Cancel"] = "Cancel",
 		["Current profile has been reset."] = "Current profile has been reset.",
+		
+		["YaHT_MISS"] = "Votre Tir tranquillisant a raté .+",
+		["YaHT_FAILEDMSG"] = "YaHT: Tranquilizing Shot failed!",
+		["YaHT_TRANQMSG"] = "YaHT: Tranquilizing Shot on %t",
 	}
 end)

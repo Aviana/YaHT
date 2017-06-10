@@ -20,9 +20,17 @@ AceLocale:RegisterTranslations("deDE", function()
 		["Tranq options"] = "'Einlullender Schuss' Optionen",
 		["Tranq announce"] = "'Einlullender Schuss' Ansage",
 		["Enable Tranquilizing Shot announce"] = "Melde 'Einlullender Schuss' an einen Kanal",
+		["Tranq fail announce"] = "'Einlullender Schuss' Verfehl-Ansage",
+		["Enable failed Tranquilizing Shot announce"] = "Melde 'Einlullender Schuss verfehlt' an einen Kanal",
+		["<Message>"] = "<Nachricht>",
 		["Channel"] = "Chatkanal",
 		["Channel in which to announce"] = "Kanal in dem angesagt wird.",
 		["<channelname>"] = "<Kanalname>",
+		["Tranq Message"] = "'Einlullender Schuss' Nachricht",
+		["What to send to the channel"] = "Was an den Kanal \195\188bermittelt wird.",
+		["Use plain text and substitute the targets name with %t"] = "Benutze Klartext und verwende %t um den namen des Ziels zu setzen",
+		["Tranq fail Message"] = "Einlull Verfehl-Nachricht",
+		["What to send to the channel when tranq failed"] = "Was an den Kanal \195\188bermittelt wird wenn fehlgeschlagen",
 		["Reset Settings"] = "Einstellungen zurücksetzen",
 		
 		["Timer options"] = "Messleistenoptionen",
@@ -46,7 +54,6 @@ AceLocale:RegisterTranslations("deDE", function()
 		["Viper Sting"] = "Vipernbiss",
 		["Tranquilizing Shot"] = "Einlullender Schuss",
 		
-		["YaHT: Tranquilizing Shot on "] = "YaHT: Einlullender Schuss auf ",
 		["Loaded. The hunt begins!"] = "Geladen. Die Jagt beginnt!",
 		["Locked."] = "Verriegelt.",
 		["Unlocked."] = "Entriegelt.",
@@ -54,5 +61,9 @@ AceLocale:RegisterTranslations("deDE", function()
 		["OK"] = "OK",
 		["Cancel"] = "Abbrechen",
 		["Current profile has been reset."] = "Das momentane Profil wurde zurückgesetzt.",
+		
+		["YaHT_MISS"] = "Einlullender Schuss hat .+ verfehlt",
+		["YaHT_FAILEDMSG"] = "YaHT: Einlullender Schuss fehlgeschlagen!",
+		["YaHT_TRANQMSG"] = "YaHT: Einlullender Schuss auf %t",
 	}
 end)

@@ -47,6 +47,8 @@ YaHT.defaults = {
 		border = 3,
 		alpha = 1,
 		malpha = 0.2,
+		tranqmsg = L["YaHT_TRANQMSG"],
+		tranqfailmsg = L["YaHT_FAILEDMSG"],
 	},
 }
 --------------------------------------------------------------------------------------------

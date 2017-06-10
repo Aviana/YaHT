@@ -167,6 +167,14 @@ function YaHT:OnInitialize()
 						set = function() YaHT.db.profile.tranq = not YaHT.db.profile.tranq end,
 						order = 1,
 					},
+					fail = {
+						type = "toggle",
+						name = L["Tranq fail announce"],
+						desc = L["Enable failed Tranquilizing Shot announce"],
+						get = function() return YaHT.db.profile.tranqfailed end,
+						set = function() YaHT.db.profile.tranqfailed = not YaHT.db.profile.tranqfailed end,
+						order = 2,
+					},
 					channel = {
 						type = "text",
 						name = L["Channel"],
@@ -174,7 +182,25 @@ function YaHT:OnInitialize()
 						usage = L["<channelname>"],
 						get = function() return YaHT.db.profile.channel end,
 						set = function(v) YaHT.db.profile.channel = v end,
-						order = 2,
+						order = 3,
+					},
+					tranqmsg = {
+						type = "text",
+						name = L["Tranq Message"],
+						desc = L["What to send to the channel"],
+						usage = L["Use plain text and substitute the targets name with %t"],
+						get = function() return YaHT.db.profile.tranqmsg end,
+						set = function(v) YaHT.db.profile.tranqmsg = v end,
+						order = 4,
+					},
+					tranqfailmsg = {
+						type = "text",
+						name = L["Tranq fail Message"],
+						desc = L["What to send to the channel when tranq failed"],
+						usage = L["<Message>"],
+						get = function() return YaHT.db.profile.tranqfailmsg end,
+						set = function(v) YaHT.db.profile.tranqfailmsg = v end,
+						order = 5,
 					},
 				},
 				order = 5,
@@ -235,11 +261,13 @@ function YaHT:OnInitialize()
 	
 	self:RegisterEvent("SPELLCAST_FAILED", "SPELLCAST_STOP")
 	self:RegisterEvent("SPELLCAST_INTERRUPTED", "SPELLCAST_STOP")
+	self:RegisterEvent("SPELLCAST_FAILED")
 	self:RegisterEvent("SPELLCAST_DELAYED")
 	self:RegisterEvent("START_AUTOREPEAT_SPELL")
 	self:RegisterEvent("STOP_AUTOREPEAT_SPELL")
 	self:RegisterEvent("ITEM_LOCK_CHANGED")
 	self:RegisterEvent("UNIT_RANGEDDAMAGE")
+	self:RegisterEvent("CHAT_MSG_SPELL_DAMAGESHIELDS_ON_SELF")
 	self:Hook("CastSpell")
 	self:Hook("CastSpellByName")
 	self:Hook("UseAction")
@@ -334,17 +362,7 @@ function YaHT:StartCast(spellName, rank)
 		castbar = YaHT.db.profile.multi
 		self.casttime = 0.5
 	elseif spellName == L["Tranquilizing Shot"] and YaHT.db.profile.tranq then
-		local targetName = UnitName("target")
-		if YaHT.db.profile.channel and YaHT.db.profile.channel ~= "" then
-			if self.ChatTypes[strupper(YaHT.db.profile.channel)] then
-				SendChatMessage(L["YaHT: Tranquilizing Shot on "]..targetName, strupper(YaHT.db.profile.channel))
-			else
-				local id = GetChannelName(YaHT.db.profile.channel)
-				if id then
-					SendChatMessage(L["YaHT: Tranquilizing Shot on "]..targetName, "CHANNEL", nil, id)
-				end
-			end
-		end
+		self:ScheduleEvent("YaHT_TRANQ", self.Announce, 0.2, self, string.gsub(YaHT.db.profile.tranqmsg,"%%t",UnitName("target")))
 	end
 	if not self.casttime then
 		self.casting = true
@@ -503,6 +521,23 @@ function YaHT:YAHT_ON_UPDATE()
 	end
 end
 
+function YaHT:Announce(msg)
+	if self.ChatTypes[strupper(YaHT.db.profile.channel)] then
+		SendChatMessage(msg, strupper(YaHT.db.profile.channel))
+	else
+		local id = GetChannelName(YaHT.db.profile.channel)
+		if id then
+			SendChatMessage(msg, "CHANNEL", nil, id)
+		end
+	end
+end
+
+function YaHT:CHAT_MSG_SPELL_DAMAGESHIELDS_ON_SELF()
+	if string.find(arg1, L["YaHT_MISS"]) then
+		self:Announce(YaHT.db.profile.tranqfailmsg)
+	end
+end
+
 function YaHT:UNIT_RANGEDDAMAGE()
 	self.newswingtime = UnitRangedDamage("player") - SWING_TIME
 end
@@ -513,9 +548,17 @@ function YaHT:SPELLCAST_DELAYED()
 	end
 end
 
+function YaHT:SPELLCAST_FAILED()
+	self:CancelScheduledEvent("YaHT_TRANQ")
+end
+
 function YaHT:SPELLCAST_STOP()
 	self.casting = nil
 	self.castblock = nil
+	if incTranq and YaHT.db.profile.channel and YaHT.db.profile.channel ~= "" then
+		local msg = string.gsub(YaHT.db.profile.tranqmsg, "%%t", currTarget)
+		self:Announce(msg)
+	end
 end
 
 function YaHT:START_AUTOREPEAT_SPELL()
