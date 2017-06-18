@@ -549,6 +549,7 @@ function YaHT:SPELLCAST_DELAYED()
 end
 
 function YaHT:SPELLCAST_FAILED()
+	self.casting = nil
 	self:CancelScheduledEvent("YaHT_TRANQ")
 end
 
