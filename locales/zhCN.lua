@@ -42,6 +42,9 @@ AceLocale:RegisterTranslations("zhCN", function()
 		["Alpha during player movent"] = "Alpha during player movent",
 		["Bar Texture"] = "Bar Texture",
 		["<texturename>"] = "<texturename>",
+		["L2R Growth"] = "L2R Growth",
+		["Toggle between centered growth and left to right growth"] = "Toggle between centered growth and left to right growth",
+
 		
 		["Aimed Shot"] = "瞄准射击",
 		["Multi-Shot"] = "多重射击",

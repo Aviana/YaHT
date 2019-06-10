@@ -42,6 +42,9 @@ AceLocale:RegisterTranslations("frFR", function()
 		["Alpha during player movent"] = "Alpha during player movent",
 		["Bar Texture"] = "Bar Texture",
 		["<texturename>"] = "<texturename>",
+		["L2R Growth"] = "L2R Growth",
+		["Toggle between centered growth and left to right growth"] = "Basculer entre croissance centrée et croissance gauche à droite",
+
 		
 		["Aimed Shot"] = "Vis\195\169e",
 		["Multi-Shot"] = "Fl\195\168ches multiples",

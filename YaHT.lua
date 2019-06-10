@@ -151,6 +151,14 @@ function YaHT:OnInitialize()
 						set = function(v) YaHT.db.profile.timertexture = v; YaHT:OnProfileEnable() end,
 						order = 9,
 					},
+					direction = {
+						name = L["L2R Growth"],
+						desc = L["Toggle between centered growth and left to right growth"],
+						type = "toggle",
+						get = function() return YaHT.db.profile.direction end,
+						set = function() YaHT.db.profile.direction = not YaHT.db.profile.direction; YaHT:OnProfileEnable() end,
+						order = 10,
+					},
 				},
 				order = 4,
 			},
@@ -221,12 +229,12 @@ function YaHT:OnInitialize()
 	self.OnMenuRequest = self.cmdtable
 	self:RegisterChatCommand({"/yaht", "/yetanotherhuntertimer"}, self.cmdtable)
 	----------------------------------------------------------------------------------------
-	
+
 	self:RegisterDefaults("profile", self.defaults.profile)
-	
+
 	self.x, self.y = GetPlayerMapPosition("player")
 	self:ScheduleRepeatingEvent("UPDATE_PLAYER_POSITION", self.UPDATE_PLAYER_POSITION, 0.1, self)
-	
+
 	self.lastshot = GetTime()
 	self.berserkValue = 0
 	self.ShotSpells = {
@@ -251,14 +259,14 @@ function YaHT:OnInitialize()
 		["RAID"] = true,
 		["RAID_WARNING"] = true,
 	}
-	
+
 	self:Init()
 
 	local _, playerRace = UnitRace("player")
 	if playerRace == "Troll" then
 		self:RegisterEvent("UNIT_AURA")
 	end
-	
+
 	self:RegisterEvent("SPELLCAST_FAILED", "SPELLCAST_STOP")
 	self:RegisterEvent("SPELLCAST_INTERRUPTED", "SPELLCAST_STOP")
 	self:RegisterEvent("SPELLCAST_FAILED")
@@ -271,7 +279,7 @@ function YaHT:OnInitialize()
 	self:Hook("CastSpell")
 	self:Hook("CastSpellByName")
 	self:Hook("UseAction")
-	
+
 	self:SystemMessage(L["Loaded. The hunt begins!"])
 end
 
@@ -284,20 +292,19 @@ function YaHT:Init()
 	self.Bar:SetClampedToScreen(true)
 
 	self.Bar.Texture = self.Bar:CreateTexture("YaHTFrameTexture","OVERLAY")
-	self.Bar.Texture:SetPoint("CENTER",self.Bar,"CENTER")
 
 	self.Bar.Background = self.Bar:CreateTexture(nil,"ARTWORK")
 	self.Bar.Background:SetTexture(15/100, 15/100, 15/100, 1)
 	self.Bar.Background:SetAllPoints(self.Bar)
-	
+
 	self.Bar.Border = self.Bar:CreateTexture(nil,"BORDER")
 	self.Bar.Border:SetPoint("CENTER",self.Bar,"CENTER")
 	self.Bar.Border:SetTexture(0,0,0)
-	
+
 	self.Bar.BorderBackground = self.Bar:CreateTexture(nil,"BACKGROUND")
 	self.Bar.BorderBackground:SetPoint("CENTER",self.Bar,"CENTER")
 	self.Bar.BorderBackground:SetTexture(1,1,1)
-	
+
 	self:OnProfileEnable()
 end
 
@@ -417,23 +424,24 @@ end
 --On Profile changed------------------------------------------------------------------------
 function YaHT:OnProfileEnable()
 	-- Apply settings here
-	
+
 	local x = YaHT.db.profile.x
 	local y = YaHT.db.profile.y
 	local height = YaHT.db.profile.height
 	local width = YaHT.db.profile.width
-	
+	local direction = YaHT.db.profile.direction
+
 	self.Bar:SetAlpha(YaHT.db.profile.alpha)
 	self.Bar:SetWidth(width)
 	self.Bar:SetHeight(height)
 	self.Bar:ClearAllPoints()
-	
+
 	if x then
 		self.Bar:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
 	else
 		self.Bar:SetPoint("CENTER", UIParent, "CENTER", 0, -350)
 	end
-	
+
 	self.Bar.Texture:SetHeight(height)
 	self.Bar.Texture:SetWidth(width)
 	self.Bar.Texture:SetTexture("Interface\\AddOns\\YaHT\\media\\"..YaHT.db.profile.timertexture)
@@ -442,13 +450,19 @@ function YaHT:OnProfileEnable()
 	else
 		self.Bar.Texture:SetVertexColor(YaHT.db.profile.colors.timercolor.r,YaHT.db.profile.colors.timercolor.g,YaHT.db.profile.colors.timercolor.b)
 	end
-	
+
 	self.Bar.Border:SetWidth(width +3)
 	self.Bar.Border:SetHeight(height +3)
-	
+
 	self.Bar.BorderBackground:SetWidth(width +(YaHT.db.profile.border * 2))
 	self.Bar.BorderBackground:SetHeight(height +(YaHT.db.profile.border * 2))
 	self.Bar.BorderBackground:SetVertexColor(YaHT.db.profile.colors.bordercolor.r,YaHT.db.profile.colors.bordercolor.g,YaHT.db.profile.colors.bordercolor.b)
+
+	if direction then
+		self.Bar.Texture:SetPoint("LEFT",self.Bar,"LEFT")
+	else
+		self.Bar.Texture:SetPoint("CENTER",self.Bar,"CENTER")
+	end
 
 	self:ToggleLock(true)
 end
@@ -627,14 +641,14 @@ end
 function YaHT:CastSpellByName(spellName, onSelf)
 	-- Call the original function
 	self.hooks.CastSpellByName(spellName, onSelf)
-	
+
 	for i=1,120 do
 		if IsCurrentAction(i) then
 			break
 		end
 		if i == 120 then return end
 	end
-	
+
 	local _,_,rank = string.find(spellName,"(%d+)")
 	local _, _, spellName = string.find(spellName, "^([^%(]+)")
 	if not rank then
@@ -658,9 +672,9 @@ end
 function YaHT:UseAction(slot, checkCursor, onSelf)
 	-- Call the original function
 	self.hooks.UseAction(slot, checkCursor, onSelf)
-	
+
 	if GetActionText(slot) or not IsCurrentAction(slot) then return end
-	
+
 	self.ScanTip:ClearLines()
 	self.ScanTip:SetAction(slot)
 	local spellName = YaHTScanTipTextLeft1:GetText()
@@ -671,7 +685,7 @@ function YaHT:UseAction(slot, checkCursor, onSelf)
 	if not rank then
 		rank = 1
 	end
-	
+
 	if self.ShotSpells[spellName] and not self.castblock then
 		self:StartCast(spellName, rank)
 	end
