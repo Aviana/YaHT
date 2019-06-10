@@ -44,6 +44,7 @@ YaHT.defaults = {
 		timertexture = "Bar",
 		height = 5,
 		width = 300,
+		direction = false,
 		border = 3,
 		alpha = 1,
 		malpha = 0.2,
