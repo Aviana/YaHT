@@ -1,5 +1,5 @@
 # YaHT
-Yet another Hunter Timer for WoW 1.12.1
+Yet another Hunter Timer for WoW classic
 
 FOR THE 1.12.1 VERSION SELECT IT FROM THE BRANCH MENU
 
