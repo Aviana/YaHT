@@ -1,30 +1,21 @@
-local _, playerClass = UnitClass("player")
-if playerClass ~= "HUNTER" then return end
 
-local L = YaHT.L
-
-StaticPopupDialogs["RESET_YAHT_PROFILE"] = {
-	text = L["Do you really want to reset to default for your current profile?"],
-	button1 = L["OK"],
-	button2 = L["Cancel"],
-	OnAccept = function()
-		YaHT:ResetDB("profile")
-		--Need To Reset the options Window here if its open
-		YaHT:OnProfileEnable()
-		YaHT:SystemMessage(YaHT.L["Current profile has been reset."])
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = 1
-};
-
--- Default Settings ------------------------------------------------------------------------
-YaHT.defaults = {
-	profile = {
-		aimed = true,
-		multi = true,
-		locked = false,
-		colors = {
+function YaHT:LoadDefaults()
+	self.defaults = {
+		profile = {
+			lock = false,
+			scale = 1,
+			width = 300,
+			height = 5,
+			statusbar = "YaHT Bar",
+			border = "None",
+			font = "Myriad Condensed Web",
+			alpha = 1,
+			malpha = 0.2,
+			showmulti = true,
+			showaimed = true,
+			enablebackground = true,
+			background = "Chat Frame",
+			border = "Blizzard Dialog",
 			bordercolor = {
 				r = 1,
 				g = 1,
@@ -40,16 +31,12 @@ YaHT.defaults = {
 				g = 0,
 				b = 0,
 			},
+			backgroundcolor = {
+				r = 0,
+				g = 0,
+				b = 0,
+				a = 0.8,
+			},
 		},
-		timertexture = "Bar",
-		height = 5,
-		width = 300,
-		direction = false,
-		border = 3,
-		alpha = 1,
-		malpha = 0.2,
-		tranqmsg = L["YaHT_TRANQMSG"],
-		tranqfailmsg = L["YaHT_FAILEDMSG"],
-	},
-}
---------------------------------------------------------------------------------------------
+	}
+end
