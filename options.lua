@@ -1,3 +1,4 @@
+if select(2,UnitClass("player")) ~= "HUNTER" then return end
 local Addon = select(1, ...)
 
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
@@ -91,7 +92,7 @@ function YaHT:CreateConfig()
 						width = "full",
 						type = "range",
 						order = 5,
-						min = 10,
+						min = 5,
 						max = 50,
 						step = 1,
 					},
@@ -151,19 +152,25 @@ function YaHT:CreateConfig()
 						get = getColor,
 						set = setColor,
 					},
+					fill = {
+						name = L["Fill from middle"],
+						desc = L["Extend the bar from the middle outwards."],
+						type = "toggle",
+						order = 11,
+					},
 					backgroundheader = {
 						name = L["Background options"],
 						type = "header",
-						order = 11,
+						order = 12,
 					},
 					enablebackground = {
 						name = L["Background"],
 						desc = L["Show a background."],
 						type = "toggle",
-						order = 12,
+						order = 13,
 					},
 					background = {
-						order = 13,
+						order = 14,
 						type = "select",
 						name = L["Background texture"],
 						dialogControl = "LSM30_Background",
@@ -172,7 +179,7 @@ function YaHT:CreateConfig()
 					backgroundcolor = {
 						name = L["Background Color"],
 						type = "color",
-						order = 14,
+						order = 15,
 						hasAlpha = true,
 						get = getColor,
 						set = setColor,
@@ -180,16 +187,16 @@ function YaHT:CreateConfig()
 					borderheader = {
 						name = L["Border options"],
 						type = "header",
-						order = 15,
+						order = 16,
 					},
 					enableborder = {
 						name = L["Border"],
 						desc = L["Show a border."],
 						type = "toggle",
-						order = 16,
+						order = 17,
 					},
 					border = {
-						order = 17,
+						order = 18,
 						type = "select",
 						name = L["Border texture"],
 						dialogControl = "LSM30_Border",
@@ -198,9 +205,26 @@ function YaHT:CreateConfig()
 					bordercolor = {
 						name = L["Border Color"],
 						type = "color",
-						order = 18,
+						order = 19,
 						get = getColor,
 						set = setColor,
+					},
+					castbarheader = {
+						name = L["Castbar options"],
+						type = "header",
+						order = 20,
+					},
+					showaimed = {
+						name = GetSpellInfo(19434),
+						desc = L["Show this on the default castbar."],
+						type = "toggle",
+						order = 21,
+					},
+					showmulti = {
+						name = GetSpellInfo(2643),
+						desc = L["Show this on the default castbar."],
+						type = "toggle",
+						order = 22,
 					},
 				}
 			}

@@ -1,3 +1,4 @@
+if select(2,UnitClass("player")) ~= "HUNTER" then return end
 local YaHT = select(2, ...)
 local L = {
 ["Profiles"] = "Profiles",
@@ -30,7 +31,10 @@ local L = {
 ["Border Color"] = "Border Color",
 ["Timer Color"] = "Timer Color",
 ["Draw Color"] = "Draw Color",
-
+["Fill from middle"] = "Fill from middle",
+["Extend the bar from the middle outwards."] = "Extend the bar from the middle outwards.",
+["Castbar options"] = "Castbar options",
+["Show this on the default castbar."] = "Show this on the default castbar.",
 }
 
 YaHT.L = L

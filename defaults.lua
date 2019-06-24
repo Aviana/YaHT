@@ -1,3 +1,4 @@
+if select(2,UnitClass("player")) ~= "HUNTER" then return end
 
 function YaHT:LoadDefaults()
 	self.defaults = {
@@ -16,6 +17,7 @@ function YaHT:LoadDefaults()
 			enablebackground = true,
 			background = "Chat Frame",
 			border = "Blizzard Dialog",
+			fill = true,
 			bordercolor = {
 				r = 1,
 				g = 1,
