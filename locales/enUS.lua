@@ -35,6 +35,21 @@ local L = {
 ["Extend the bar from the middle outwards."] = "Extend the bar from the middle outwards.",
 ["Castbar options"] = "Castbar options",
 ["Show this on the default castbar."] = "Show this on the default castbar.",
+["Announce options"] = "Announce options",
+["Announce %s"] = "Announce %s",
+["Enable / disable the announcement."] = "Enable / disable the announcement.",
+["Announce failed %s"] = "Announce failed %s",
+["Announce in"] = "Announce in",
+["The channel in which to announce."] = "The channel in which to announce.",
+["Whisper"] = "Whisper",
+["Channel"] = "Channel",
+["Raid Warning"] = "Raid Warning",
+["Say"] = "Say",
+["Yell"] = "Yell",
+["Party"] = "Party",
+["Raid"] = "Raid",
+["Channel/Playername"] = "Channel/Playername",
+["Set the channel or player for whisper."] = "Set the channel or player for whisper.",
 }
 
 YaHT.L = L

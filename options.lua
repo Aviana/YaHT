@@ -226,6 +226,40 @@ function YaHT:CreateConfig()
 						type = "toggle",
 						order = 22,
 					},
+					announceheader = {
+						name = L["Announce options"],
+						type = "header",
+						order = 23,
+					},
+					tranqannounce = {
+						name = string.format(L["Announce %s"],GetSpellInfo(19801)),
+						desc = L["Enable / disable the announcement."],
+						type = "toggle",
+						order = 24,
+						width = "double",
+					},
+					tranqannouncefail = {
+						name = string.format(L["Announce failed %s"],GetSpellInfo(19801)),
+						desc = L["Enable / disable the announcement."],
+						type = "toggle",
+						order = 25,
+						width = "double",
+					},
+					announcetype = {
+						name = L["Announce in"],
+						desc = L["The channel in which to announce."],
+						type = "select",
+						order = 26,
+						values = {["WHISPER"] = L["Whisper"], ["CHANNEL"] = L["Channel"], ["RAID_WARNING"] = L["Raid Warning"], ["SAY"] = L["Say"], ["YELL"] = L["Yell"], ["PARTY"] = L["Party"], ["RAID"] = L["Raid"]},
+						set = function(info, value) set(info,value) LibStub("AceConfigRegistry-3.0", true):NotifyChange("YaHT") end
+					},
+					targetchannel = {
+						name = L["Channel/Playername"],
+						desc = L["Set the channel or player for whisper."],
+						type = "input",
+						order = 27,
+						hidden = function() return not (YaHT.db.profile.announcetype == "WHISPER" or YaHT.db.profile.announcetype == "CHANNEL") end,
+					},
 				}
 			}
 		}

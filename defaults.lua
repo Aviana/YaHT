@@ -18,6 +18,7 @@ function YaHT:LoadDefaults()
 			background = "Chat Frame",
 			border = "Blizzard Dialog",
 			fill = true,
+			announcetype = "SAY",
 			bordercolor = {
 				r = 1,
 				g = 1,

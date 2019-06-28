@@ -219,6 +219,22 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			end
 		end
 		return
+	elseif event == "SPELL_CAST_SUCCESS" and spellID == 19801 then
+		if YaHT.db.profile.tranqannounce then
+			local num
+			if YaHT.db.profile.announcetype == "CHANNEL" then
+				num = GetChannelName(YaHT.db.profile.targetchannel)
+			end
+			SendChatMessage("Tranq out!", YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
+		end
+	elseif event == "SPELL_MISSED" and spellID == 19801 then
+		if YaHT.db.profile.tranqannouncefail then
+			local num
+			if YaHT.db.profile.announcetype == "CHANNEL" then
+				num = GetChannelName(YaHT.db.profile.targetchannel)
+			end
+			SendChatMessage("Tranq missed!", YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
+		end
 	end
 	if (name ~= AimedShot and name ~= MultiShot) or (not YaHT.db.profile.showaimed and name == AimedShot) or (not YaHT.db.profile.showmulti and name == MultiShot) then return end
 	if event == "SPELL_CAST_START" then
