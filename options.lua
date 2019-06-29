@@ -260,6 +260,20 @@ function YaHT:CreateConfig()
 						order = 27,
 						hidden = function() return not (YaHT.db.profile.announcetype == "WHISPER" or YaHT.db.profile.announcetype == "CHANNEL") end,
 					},
+					announcemsg = {
+						name = L["Announce Message"],
+						desc = L["Set the message to be broadcasted."],
+						type = "input",
+						order = 28,
+						width = "full",
+					},
+					announcefailmsg = {
+						name = L["Announce Fail Message"],
+						desc = L["Set the message to be broadcasted."],
+						type = "input",
+						order = 29,
+						width = "full",
+					},
 				}
 			}
 		}

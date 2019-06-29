@@ -50,6 +50,11 @@ local L = {
 ["Raid"] = "Raid",
 ["Channel/Playername"] = "Channel/Playername",
 ["Set the channel or player for whisper."] = "Set the channel or player for whisper.",
+["Announce Message"] = "Announce Message",
+["Announce Fail Message"] = "Announce Fail Message",
+["Set the message to be broadcasted."] = "Set the message to be broadcasted.",
+["announcemsg"] = "Tranq out on %s!",
+["announcefailmsg"] = "Tranq failed on %s!",
 }
 
 YaHT.L = L

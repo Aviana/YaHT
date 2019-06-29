@@ -25,8 +25,18 @@ local function OnUpdate(self, elapsed)
 	local config = YaHT.db.profile
 	if not config.lock then
 		self.mockTime = self.mockTime + elapsed
-		if self.mockTime > 3 then self.mockTime = 0 end
-		self.texture:SetWidth(self:GetWidth() * self.mockTime/3)
+		if self.mockTime > self.swingtime then
+			self.texture:SetVertexColor(config.drawcolor.r,config.drawcolor.g,config.drawcolor.b)
+			self.texture:SetWidth(self:GetWidth() * (1-(self.mockTime2/SWING_TIME)))
+			self.mockTime2 = self.mockTime2 + elapsed
+			if self.mockTime2 > SWING_TIME then
+				self.mockTime = 0
+			end
+		else
+			self.mockTime2 = 0
+			self.texture:SetVertexColor(config.timercolor.r,config.timercolor.g,config.timercolor.b)
+			self.texture:SetWidth(self:GetWidth() * self.mockTime/self.swingtime)
+		end
 		return
 	end
 	local curTime = GetTime()
@@ -163,6 +173,7 @@ function YaHT:ApplySettings()
 		self.mainFrame:Hide()
 	else
 		self.mainFrame:Show()
+		self.mainFrame:SetAlpha(YaHT.db.profile.alpha)
 		if self.mainFrame.SwingStart then
 			self.mainFrame.texture:SetVertexColor(config.drawcolor.r,config.drawcolor.g,config.drawcolor.b)
 		else
@@ -188,7 +199,7 @@ function YaHT:Load()
 	self.mainFrame.mockTime = 0
 	self.mainFrame.time = 0
 	self.mainFrame.lastshot = GetTime()
---	self.mainFrame.SwingStart = GetTime()
+	self.mainFrame.swingtime = UnitRangedDamage("player") - SWING_TIME
 	self.mainFrame:SetScript("OnUpdate", OnUpdate)
 	
 	self.mainFrame.background = self.mainFrame:CreateTexture("YaHTMainFrameBackground", "BACKGROUND")
@@ -205,7 +216,7 @@ function YaHT:Load()
 end
 
 function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
-	local _, event, _, casterID, _, _, _, targetID, _, _, _, spellID, _, _, extra_spell_id, _, _, resisted, blocked, absorbed = CombatLogGetCurrentEventInfo()
+	local _, event, _, casterID, _, _, _, targetID, targetName, _, _, spellID, _, _, extra_spell_id, _, _, resisted, blocked, absorbed = CombatLogGetCurrentEventInfo()
 	local name, rank, icon, castTime = GetSpellInfo(spellID)
 	if event == "SWING_DAMAGE" or event == "ENVIRONMENTAL_DAMAGE" or event == "RANGE_DAMAGE" or event == "SPELL_DAMAGE" then
 		if resisted or blocked or absorbed then return end
@@ -225,7 +236,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			if YaHT.db.profile.announcetype == "CHANNEL" then
 				num = GetChannelName(YaHT.db.profile.targetchannel)
 			end
-			SendChatMessage("Tranq out!", YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
+			SendChatMessage(string.format(YaHT.db.profile.announcemsg,targetName), YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
 		end
 	elseif event == "SPELL_MISSED" and spellID == 19801 then
 		if YaHT.db.profile.tranqannouncefail then
@@ -233,7 +244,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			if YaHT.db.profile.announcetype == "CHANNEL" then
 				num = GetChannelName(YaHT.db.profile.targetchannel)
 			end
-			SendChatMessage("Tranq missed!", YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
+			SendChatMessage(string.format(YaHT.db.profile.announcefailmsg,targetName), YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
 		end
 	end
 	if (name ~= AimedShot and name ~= MultiShot) or (not YaHT.db.profile.showaimed and name == AimedShot) or (not YaHT.db.profile.showmulti and name == MultiShot) then return end
@@ -299,7 +310,6 @@ end
 function YaHT:START_AUTOREPEAT_SPELL()
 	local config = YaHT.db.profile
 	local curTime = GetTime()
-	self.mainFrame.swingtime = UnitRangedDamage("player") - SWING_TIME
 	self.mainFrame.shooting = true
 --	self.mainFrame.ignoregcd = self:GCDcheck()
 	if curTime - self.mainFrame.lastshot < self.mainFrame.swingtime then

@@ -55,6 +55,11 @@ local L = {
 ["Raid"] = "Schlachtzug",
 ["Channel/Playername"] = "Kanal/Spielername",
 ["Set the channel or player for whisper."] = "Setze den Kanal oder Spieler f\195\188r fl\195\188stern.",
+["Announce Message"] = "Ansage Nachricht",
+["Announce Fail Message"] = "Ansage Nachricht fehlgeschlagen",
+["Set the message to be broadcasted."] = "Setze die Nachricht die gesendet wird.",
+["announcemsg"] = "Einlullender Schuss auf %s!",
+["announcefailmsg"] = "Einlullender Schuss fehlgeschlagen auf %s!",
 }
 
 YaHT.L = L
