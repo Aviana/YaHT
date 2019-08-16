@@ -216,8 +216,9 @@ function YaHT:Load()
 end
 
 function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
-	local _, event, _, casterID, _, _, _, targetID, targetName, _, _, spellID, _, _, extra_spell_id, _, _, resisted, blocked, absorbed = CombatLogGetCurrentEventInfo()
-	local name, rank, icon, castTime = GetSpellInfo(spellID)
+	local _, event, _, casterID, _, _, _, targetID, targetName, _, _, _, name, _, extra_spell_id, _, _, resisted, blocked, absorbed = CombatLogGetCurrentEventInfo()
+	local spellID = select(7,GetSpellInfo(name))
+	local icon, castTime = select(3, GetSpellInfo(spellID))
 	if event == "SWING_DAMAGE" or event == "ENVIRONMENTAL_DAMAGE" or event == "RANGE_DAMAGE" or event == "SPELL_DAMAGE" then
 		if resisted or blocked or absorbed then return end
 		if targetID == UnitGUID("player") then
