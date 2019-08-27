@@ -21,6 +21,8 @@ libs\AceConfig-3.0\AceConfig-3.0.xml
 
 locales\enUS.lua
 locales\deDE.lua
+locales\zhTW.lua
+locales\zhCN.lua
 
 YaHT.lua
 defaults.lua
