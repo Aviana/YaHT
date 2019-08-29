@@ -327,7 +327,7 @@ function YaHT:START_AUTOREPEAT_SPELL()
 		self.mainFrame.texture:SetVertexColor(config.drawcolor.r,config.drawcolor.g,config.drawcolor.b)
 		self.mainFrame.SwingStart = curTime
 		if IsPlayerMoving() then
-			self.mainFrame.lastshot = curTime
+			self.mainFrame.lastshot = curTime - self.mainFrame.swingtime
 		end
 	end
 	self.mainFrame:SetAlpha(YaHT.db.profile.alpha)
