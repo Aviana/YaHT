@@ -10,6 +10,7 @@ YaHT.version = 2110
 
 local SWING_TIME = 0.65
 local AimedDelay = 1
+local movementDelay = 0
 
 local AimedShot = GetSpellInfo(19434)
 local MultiShot = GetSpellInfo(2643)
@@ -56,8 +57,15 @@ local function OnUpdate(self, elapsed)
 			self.SwingStart = curTime
 			self.texture:SetWidth(0.01)
 			self:SetAlpha(config.malpha)
+			local timeSinceReadyToFire = curTime - self.lastshot + self.swingtime
+			if timeSinceReadyToFire > 0 then
+				while timeSinceReadyToFire > 0.5 do
+					timeSinceReadyToFire = timeSinceReadyToFire - 0.5
+				end
+				movementDelay = 0.5 - timeSinceReadyToFire
+			end
 		else
-			self.texture:SetWidth(config.width * math.min(((curTime - self.SwingStart) / SWING_TIME),1))
+			self.texture:SetWidth(config.width * math.min(((curTime - self.SwingStart) / (SWING_TIME + movementDelay)),1))
 			self:SetAlpha(config.alpha)
 		end
 	else
@@ -318,6 +326,9 @@ function YaHT:START_AUTOREPEAT_SPELL()
 	else
 		self.mainFrame.texture:SetVertexColor(config.drawcolor.r,config.drawcolor.g,config.drawcolor.b)
 		self.mainFrame.SwingStart = curTime
+		if IsPlayerMoving() then
+			self.mainFrame.lastshot = curTime
+		end
 	end
 	self.mainFrame:SetAlpha(YaHT.db.profile.alpha)
 	self.mainFrame:Show()
@@ -348,6 +359,7 @@ function YaHT:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellID)
 				self.mainFrame.newswingtime = nil
 			end
 			self.mainFrame.texture:SetVertexColor(config.timercolor.r,config.timercolor.g,config.timercolor.b)
+			movementDelay = 0
 		end
 	end
 end
