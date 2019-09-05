@@ -216,13 +216,16 @@ function YaHT:Load()
 end
 
 function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
-	local _, event, _, casterID, _, _, _, targetID, targetName, _, _, _, name, _, extra_spell_id, _, _, resisted, blocked, absorbed = CombatLogGetCurrentEventInfo()
-	local spellID = select(7,GetSpellInfo(name))
+	 local _, event, _, casterID, _, _, _, targetID, targetName, _, _, spellID, name, _, extra_spell_id, _, _, resisted, blocked, absorbed = CombatLogGetCurrentEventInfo()
+    local _, rank, icon, castTime = GetSpellInfo(spellID)
 	local icon, castTime = select(3, GetSpellInfo(spellID))
 	if event == "SWING_DAMAGE" or event == "ENVIRONMENTAL_DAMAGE" or event == "RANGE_DAMAGE" or event == "SPELL_DAMAGE" then
 		if resisted or blocked or absorbed then return end
 		if targetID == UnitGUID("player") then
-			if CastingBarFrame.Text:GetText() == AimedShot then
+			if name == AimedShot then
+            AimedDelay = 1
+            castTime = 3000
+        else
 				CastingBarFrame.maxValue = CastingBarFrame.maxValue + math.min(CastingBarFrame:GetValue(),AimedDelay)
 				CastingBarFrame:SetMinMaxValues(0, CastingBarFrame.maxValue)
 				if AimedDelay > 0.2 then
