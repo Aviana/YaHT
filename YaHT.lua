@@ -52,7 +52,7 @@ local function OnUpdate(self, elapsed)
 			end
 		end
 	elseif self.SwingStart then
-		if IsPlayerMoving() then
+		if IsPlayerMoving() or IsFalling() then
 			self.SwingStart = curTime
 			self.texture:SetWidth(0.01)
 			self:SetAlpha(config.malpha)
