@@ -6,7 +6,7 @@ YaHT = select(2, ...)
 local L = YaHT.L
 local ACR = LibStub("AceConfigRegistry-3.0", true)
 local SML = LibStub:GetLibrary("LibSharedMedia-3.0")
-YaHT.version = 2110
+YaHT.version = 2120
 
 local SWING_TIME = 0.65
 local AimedDelay = 1
