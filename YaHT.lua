@@ -6,7 +6,7 @@ YaHT = select(2, ...)
 local L = YaHT.L
 local ACR = LibStub("AceConfigRegistry-3.0", true)
 local SML = LibStub:GetLibrary("LibSharedMedia-3.0")
-YaHT.version = 2120
+YaHT.version = 2130
 
 local SWING_TIME = 0.65
 local AimedDelay = 1
@@ -224,16 +224,13 @@ function YaHT:Load()
 end
 
 function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
-	 local _, event, _, casterID, _, _, _, targetID, targetName, _, _, spellID, name, _, extra_spell_id, _, _, resisted, blocked, absorbed = CombatLogGetCurrentEventInfo()
-    local _, rank, icon, castTime = GetSpellInfo(spellID)
+	local _, event, _, casterID, _, _, _, targetID, targetName, _, _, _, name, _, extra_spell_id, _, _, resisted, blocked, absorbed = CombatLogGetCurrentEventInfo()
+	local spellID = select(7,GetSpellInfo(name))
 	local icon, castTime = select(3, GetSpellInfo(spellID))
 	if event == "SWING_DAMAGE" or event == "ENVIRONMENTAL_DAMAGE" or event == "RANGE_DAMAGE" or event == "SPELL_DAMAGE" then
 		if resisted or blocked or absorbed then return end
 		if targetID == UnitGUID("player") then
-			if name == AimedShot then
-            AimedDelay = 1
-            castTime = 3000
-        else
+			if CastingBarFrame.Text:GetText() == AimedShot then
 				CastingBarFrame.maxValue = CastingBarFrame.maxValue + math.min(CastingBarFrame:GetValue(),AimedDelay)
 				CastingBarFrame:SetMinMaxValues(0, CastingBarFrame.maxValue)
 				if AimedDelay > 0.2 then
@@ -242,7 +239,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			end
 		end
 		return
-	elseif event == "SPELL_CAST_SUCCESS" and spellID == 19801 then
+	elseif event == "SPELL_CAST_SUCCESS" and spellID == 19801 and casterID == UnitGUID("player") then
 		if YaHT.db.profile.tranqannounce then
 			local num
 			if YaHT.db.profile.announcetype == "CHANNEL" then
@@ -250,7 +247,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			end
 			SendChatMessage(string.format(YaHT.db.profile.announcemsg,targetName), YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
 		end
-	elseif event == "SPELL_MISSED" and spellID == 19801 then
+	elseif event == "SPELL_MISSED" and spellID == 19801 and casterID == UnitGUID("player") then
 		if YaHT.db.profile.tranqannouncefail then
 			local num
 			if YaHT.db.profile.announcetype == "CHANNEL" then
@@ -259,7 +256,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			SendChatMessage(string.format(YaHT.db.profile.announcefailmsg,targetName), YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
 		end
 	end
-	if (name ~= AimedShot and name ~= MultiShot) or (not YaHT.db.profile.showaimed and name == AimedShot) or (not YaHT.db.profile.showmulti and name == MultiShot) then return end
+	if casterID ~= UnitGUID("player") or (name ~= AimedShot and name ~= MultiShot) or (not YaHT.db.profile.showaimed and name == AimedShot) or (not YaHT.db.profile.showmulti and name == MultiShot) then return end
 	if event == "SPELL_CAST_START" then
 		self.mainFrame.casting = true
 		
