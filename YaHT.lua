@@ -234,7 +234,12 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 				AimedDelay = 1
 				castTime = 3000
 			else
-				CastingBarFrame.maxValue = CastingBarFrame.maxValue + math.min(CastingBarFrame:GetValue(),AimedDelay)
+				local maxValue
+				maxValue = 0
+				if not CastingBarFrame.maxValue == nil then
+					maxValue = CastingBarFrame.maxValue
+				end
+				CastingBarFrame.maxValue = maxValue + math.min(CastingBarFrame:GetValue(),AimedDelay)
 				CastingBarFrame:SetMinMaxValues(0, CastingBarFrame.maxValue)
 				if AimedDelay > 0.2 then
 					AimedDelay = AimedDelay - 0.2
