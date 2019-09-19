@@ -209,6 +209,7 @@ function YaHT:Load()
 	self.mainFrame.lastshot = GetTime()
 	self.mainFrame.swingtime = UnitRangedDamage("player") - SWING_TIME
 	self.mainFrame:SetScript("OnUpdate", OnUpdate)
+	CastingBarFrame.maxValue = 0
 	
 	self.mainFrame.background = self.mainFrame:CreateTexture("YaHTMainFrameBackground", "BACKGROUND")
 	self.mainFrame.background:SetAllPoints(self.mainFrame)
@@ -247,7 +248,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			end
 		end
 		return
-	elseif event == "SPELL_CAST_SUCCESS" and spellID == 19801 then
+	elseif event == "SPELL_CAST_SUCCESS" and spellID == 19801 and casterID == UnitGUID("player") then
 		if YaHT.db.profile.tranqannounce then
 			local num
 			if YaHT.db.profile.announcetype == "CHANNEL" then
@@ -255,7 +256,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			end
 			SendChatMessage(string.format(YaHT.db.profile.announcemsg,targetName), YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
 		end
-	elseif event == "SPELL_MISSED" and spellID == 19801 then
+	elseif event == "SPELL_MISSED" and spellID == 19801 and casterID == UnitGUID("player") then
 		if YaHT.db.profile.tranqannouncefail then
 			local num
 			if YaHT.db.profile.announcetype == "CHANNEL" then
@@ -265,7 +266,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 		end
 	end
 	if (name ~= AimedShot and name ~= MultiShot) or (not YaHT.db.profile.showaimed and name == AimedShot) or (not YaHT.db.profile.showmulti and name == MultiShot) then return end
-	if event == "SPELL_CAST_START" then
+	if event == "SPELL_CAST_START" and casterID == UnitGUID("player") then
 		self.mainFrame.casting = true
 		
 		if name == AimedShot then
