@@ -209,7 +209,6 @@ function YaHT:Load()
 	self.mainFrame.lastshot = GetTime()
 	self.mainFrame.swingtime = UnitRangedDamage("player") - SWING_TIME
 	self.mainFrame:SetScript("OnUpdate", OnUpdate)
-	CastingBarFrame.maxValue = 0
 	
 	self.mainFrame.background = self.mainFrame:CreateTexture("YaHTMainFrameBackground", "BACKGROUND")
 	self.mainFrame.background:SetAllPoints(self.mainFrame)
@@ -231,20 +230,15 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 	if event == "SWING_DAMAGE" or event == "ENVIRONMENTAL_DAMAGE" or event == "RANGE_DAMAGE" or event == "SPELL_DAMAGE" then
 		if resisted or blocked or absorbed then return end
 		if targetID == UnitGUID("player") then
-			if name == AimedShot then
-				AimedDelay = 1
-				castTime = 3000
-			else
-				local maxValue
-				maxValue = 0
-				if not CastingBarFrame.maxValue == nil then
-					maxValue = CastingBarFrame.maxValue
-				end
-				CastingBarFrame.maxValue = maxValue + math.min(CastingBarFrame:GetValue(),AimedDelay)
-				CastingBarFrame:SetMinMaxValues(0, CastingBarFrame.maxValue)
-				if AimedDelay > 0.2 then
-					AimedDelay = AimedDelay - 0.2
-				end
+			local maxValue
+			maxValue = 0
+			if not CastingBarFrame.maxValue == nil then
+				maxValue = CastingBarFrame.maxValue
+			end
+			CastingBarFrame.maxValue = maxValue + math.min(CastingBarFrame:GetValue(),AimedDelay)
+			CastingBarFrame:SetMinMaxValues(0, CastingBarFrame.maxValue)
+			if AimedDelay > 0.2 then
+				AimedDelay = AimedDelay - 0.2
 			end
 		end
 		return
@@ -271,6 +265,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 		
 		if name == AimedShot then
 			AimedDelay = 1
+			castTime = 3000
 		else
 			castTime = 500
 		end
