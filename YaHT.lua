@@ -242,7 +242,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			end
 		end
 		return
-	elseif event == "SPELL_CAST_SUCCESS" and spellID == 19801 and casterID == UnitGUID("player") then
+	elseif event == "SPELL_CAST_SUCCESS" and name == GetSpellInfo(19801) and casterID == UnitGUID("player") then
 		if YaHT.db.profile.tranqannounce then
 			local num
 			if YaHT.db.profile.announcetype == "CHANNEL" then
@@ -250,7 +250,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			end
 			SendChatMessage(string.format(YaHT.db.profile.announcemsg,targetName), YaHT.db.profile.announcetype, nil, num or YaHT.db.profile.targetchannel)
 		end
-	elseif event == "SPELL_MISSED" and spellID == 19801 and casterID == UnitGUID("player") then
+	elseif event == "SPELL_MISSED" and name == GetSpellInfo(19801) and casterID == UnitGUID("player") then
 		if YaHT.db.profile.tranqannouncefail then
 			local num
 			if YaHT.db.profile.announcetype == "CHANNEL" then
