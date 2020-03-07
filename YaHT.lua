@@ -232,7 +232,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 		if targetID == UnitGUID("player") then
 			local maxValue
 			maxValue = 0
-			if not CastingBarFrame.maxValue == nil then
+			if CastingBarFrame.maxValue ~= nil then
 				maxValue = CastingBarFrame.maxValue
 			end
 			CastingBarFrame.maxValue = maxValue + math.min(CastingBarFrame:GetValue(),AimedDelay)
