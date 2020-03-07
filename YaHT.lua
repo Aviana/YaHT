@@ -22,6 +22,29 @@ local defaultMedia = {
 	[SML.MediaType.BORDER] = "Interface\\None",
 }
 
+local scanningTip = CreateFrame("GameTooltip", "YaHTScanningTooltip", nil, "GameTooltipTemplate")
+scanningTip:SetOwner(UIParent, "ANCHOR_NONE")
+
+local function GetRangedWeaponSpeed()
+	scanningTip:SetInventoryItem("player", 18)
+	for i=1, scanningTip:NumLines() do
+		local text = _G["YaHTScanningTooltipTextRight"..i]:GetText()
+		if (text ~= nil and text:sub(1, 6) == "Speed ") then
+			return tonumber(text:sub(7))
+		end
+	end
+end
+
+local function GetSpeedModifier()
+	local weaponSpeed = GetRangedWeaponSpeed()
+	if weaponSpeed == nil then
+		return 1
+	end
+
+	local playerSpeed = UnitRangedDamage("player")
+	return playerSpeed / weaponSpeed
+end
+
 local function OnUpdate(self, elapsed)
 	local config = YaHT.db.profile
 	if not config.lock then
@@ -265,9 +288,9 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 		
 		if name == AimedShot then
 			AimedDelay = 1
-			castTime = 3000
+			castTime = 3.5
 		else
-			castTime = 500
+			castTime = 0.5
 		end
 		
 		CastingBarFrame.Spark:Show()
@@ -279,7 +302,8 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 			CastingBarFrame.Flash:SetVertexColor(1, 1, 1)
 		end
 		CastingBarFrame.value = 0
-		CastingBarFrame.maxValue = castTime / 1000
+		CastingBarFrame.baseMaxValue = castTime
+		CastingBarFrame.maxValue = CastingBarFrame.baseMaxValue * GetSpeedModifier()
 		CastingBarFrame:SetMinMaxValues(0, CastingBarFrame.maxValue)
 		CastingBarFrame:SetValue(CastingBarFrame.value)
 		if ( CastingBarFrame.Text ) then
@@ -369,6 +393,11 @@ function YaHT:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellID)
 end
 
 function YaHT:UNIT_RANGEDDAMAGE()
+	local castingBarText = CastingBarFrame.Text:GetText()
+	if castingBarText and ( castingBarText == AimedShot or castingBarText == MultiShot ) then
+		CastingBarFrame.maxValue = min(CastingBarFrame.maxValue, CastingBarFrame.baseMaxValue * GetSpeedModifier())
+		CastingBarFrame:SetMinMaxValues(0, CastingBarFrame.maxValue)
+	end
 	self.mainFrame.newswingtime = UnitRangedDamage("player") - SWING_TIME
 end
 
