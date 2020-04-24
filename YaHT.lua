@@ -6,7 +6,7 @@ YaHT = select(2, ...)
 local L = YaHT.L
 local ACR = LibStub("AceConfigRegistry-3.0", true)
 local SML = LibStub:GetLibrary("LibSharedMedia-3.0")
-YaHT.version = 2120
+YaHT.version = 2130
 
 local SWING_TIME = 0.65
 local AimedDelay = 1
@@ -183,7 +183,7 @@ function YaHT:ApplySettings()
 	self.mainFrame.border:SetBackdrop(backdrop)
 	self.mainFrame.border:SetHeight(config.height + 6)
 	self.mainFrame.border:SetWidth(config.width + 6)
-	self.mainFrame.border:GetBackdropBorderColor(config.bordercolor.r, config.bordercolor.g, config.bordercolor.b)
+	self.mainFrame.border:SetBackdropBorderColor(config.bordercolor.r, config.bordercolor.g, config.bordercolor.b)
 	
 	if config.enablebackground then
 		self.mainFrame.background:Show()
