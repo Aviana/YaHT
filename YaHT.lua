@@ -6,7 +6,7 @@ YaHT = select(2, ...)
 local L = YaHT.L
 local ACR = LibStub("AceConfigRegistry-3.0", true)
 local SML = LibStub:GetLibrary("LibSharedMedia-3.0")
-YaHT.version = 2130
+YaHT.version = 2140
 
 local SWING_TIME = 0.65
 local AimedDelay = 1
@@ -240,7 +240,7 @@ function YaHT:Load()
 	
 	self.mainFrame.texture = self.mainFrame:CreateTexture("YaHTMainFrameBar", "ARTWORK")
 	
-	self.mainFrame.border = CreateFrame("Frame", "YaHTMainFrameBorder", self.mainFrame)
+	self.mainFrame.border = CreateFrame("Frame", "YaHTMainFrameBorder", self.mainFrame, BackdropTemplateMixin and "BackdropTemplate")
 	self.mainFrame.border:SetPoint("CENTER", self.mainFrame, "CENTER")
 	
 	self:ApplySettings()
