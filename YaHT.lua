@@ -371,6 +371,7 @@ function YaHT:STOP_AUTOREPEAT_SPELL()
 end
 
 function YaHT:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellID)
+	if unit ~= "player" then return end
 	local config = YaHT.db.profile
 	if self.mainFrame.casting then
 		self.mainFrame.casting = nil
