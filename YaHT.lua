@@ -326,6 +326,7 @@ function YaHT:COMBAT_LOG_EVENT_UNFILTERED()
 end
 
 function YaHT:UNIT_SPELLCAST_INTERRUPTED(unit, castID, spellID)
+	if unit ~= "player" then return end
 	self.mainFrame.casting = nil
 	
 	if GetSpellInfo(spellID) == AimedShot or GetSpellInfo(spellID) == MultiShot then
